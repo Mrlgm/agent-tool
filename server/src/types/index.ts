@@ -22,12 +22,13 @@ export interface Tool {
 
 export interface Message {
   id: string;
-  role: 'user' | 'assistant' | 'tool';
+  role: 'user' | 'assistant' | 'tool' | 'system';
   content: string;
   timestamp: number;
   toolCalls?: ToolCall[];
   toolCallId?: string;
   toolResults?: ToolResult[];
+  sessionId?: string;
 }
 
 export interface ChatRequest {

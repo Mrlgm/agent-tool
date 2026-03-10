@@ -49,7 +49,14 @@ agent-tool/
 │   │   │   │   ├── search.ts      # Tavily 搜索
 │   │   │   │   └── datetime.ts    # 日期计算
 │   │   │   ├── agent.ts    # Agent 核心逻辑
-│   │   │   └── llm.ts      # LLM 服务封装
+│   │   │   ├── llm.ts      # LLM 服务封装
+│   │   │   ├── embedding/  # 向量化服务
+│   │   │   │   ├── embeddingservice.ts
+│   │   │   │   └── types.ts
+│   │   │   └── memory/     # 记忆服务（ChromaDB）
+│   │   │       ├── memoryservice.ts
+│   │   │       ├── vectorstore.ts
+│   │   │       └── types.ts
 │   │   ├── types/          # 类型定义
 │   │   │   └── index.ts
 │   │   └── index.ts        # 服务入口
@@ -65,6 +72,7 @@ agent-tool/
 
 - Node.js >= 18
 - npm >= 9
+- Docker（用于启动 ChromaDB 向量数据库）
 
 ### 安装依赖
 
@@ -91,9 +99,52 @@ VOLCENGINE_MODEL=doubao-pro-32k
 # Tavily 搜索配置（可选，用于搜索功能）
 TAVILY_API_KEY=your-tavily-api-key
 
+# ChromaDB 向量数据库配置（必需，需要先启动 Docker 服务）
+VECTOR_DB_HOST=localhost
+VECTOR_DB_PORT=8000
+VECTOR_DB_COLLECTION=long_term_memory
+
 # 服务配置
 PORT=3000
 NODE_ENV=development
+```
+
+### 启动 ChromaDB 向量数据库
+
+本项目使用 ChromaDB 作为向量数据库，需要通过 Docker 启动服务：
+
+```bash
+# 方式一：直接使用 Docker 启动（数据存储在 ./data/chroma 目录）
+docker run -d --name chromadb -p 8000:8000 -v $(pwd)/data/chroma:/chroma/chroma chromadb/chroma:latest
+
+# 方式二：使用 docker-compose（推荐）
+# 在项目根目录创建 docker-compose.yml 文件：
+```
+
+#### docker-compose.yml（推荐）
+
+```yaml
+version: '3.8'
+services:
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/chroma:/chroma/chroma
+    restart: unless-stopped
+```
+
+启动服务：
+
+```bash
+docker-compose up -d
+```
+
+验证 ChromaDB 是否启动成功：
+
+```bash
+curl http://localhost:8000/api/v1/version
 ```
 
 ### 启动开发服务器
@@ -131,6 +182,7 @@ npm run dev:client
 - **运行环境**：Node.js + tsx
 - **AI 服务**：火山方舟（Volcengine Ark）
 - **搜索服务**：Tavily API
+- **向量数据库**：ChromaDB（通过 Docker 运行）
 
 ## 📝 API 文档
 
