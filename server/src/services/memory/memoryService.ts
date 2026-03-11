@@ -92,11 +92,13 @@ export class MemoryService {
     if (!this.initialized) {
       await this.initialize();
     }
-
+   
     if (memories.length === 0) return [];
 
     const texts = memories.map(m => m.content);
-    const embeddingResults = await this.embeddingService.embedTexts(texts);
+  
+    const embeddingPromises = texts.map(text => this.embeddingService.embedText(text));
+    const embeddingResults = await Promise.all(embeddingPromises);
 
     const ids = memories.map(() => uuidv4());
     const metadatas = memories.map((m, index) => ({
@@ -172,13 +174,13 @@ export class MemoryService {
     if (!this.initialized) {
       await this.initialize();
     }
-
+    console.log(`📝 [Memory] Raw messages:`, messages);
     const validMessages = messages.filter(
-      msg => msg.role === 'user' || msg.role === 'assistant'
+      msg => msg.content?.trim() && (msg.role === 'user' || msg.role === 'assistant')
     );
 
     if (validMessages.length === 0) return;
-
+    console.log(`📝 [Memory] Valid messages:`, validMessages);
     const memories = validMessages.map(msg => ({
       content: msg.content,
       metadata: {

@@ -48,7 +48,7 @@ export class EmbeddingService {
       request
     );
 
-    const data = response.data.data[0];
+    const data = response.data.data;
     const tokens = response.data.usage.prompt_tokens_details?.text_tokens || response.data.usage.prompt_tokens;
 
     console.log(`   [Embedding] ✅ Embedding generated, dimension: ${data.embedding.length}, tokens: ${tokens}`);
@@ -57,31 +57,6 @@ export class EmbeddingService {
       embedding: data.embedding,
       tokens,
     };
-  }
-
-  async embedTexts(texts: string[]): Promise<EmbeddingResult[]> {
-    if (texts.length === 0) return [];
-
-    const request: VolcengineEmbeddingRequest = {
-      model: this.model,
-      input: texts.map(text => ({ type: 'text', text })),
-      encoding_format: this.encodingFormat as 'float',
-      dimensions: this.dimensions,
-    };
-
-    console.log(`   [Embedding] Batch embedding ${texts.length} texts`);
-
-    const response = await this.client.post<VolcengineEmbeddingResponse>(
-      '/embeddings/multimodal',
-      request
-    );
-
-    const totalTokens = response.data.usage.prompt_tokens_details?.text_tokens || response.data.usage.prompt_tokens;
-
-    return response.data.data.map((item) => ({
-      embedding: item.embedding,
-      tokens: Math.ceil(totalTokens / texts.length),
-    }));
   }
 
   getDimensions(): number {

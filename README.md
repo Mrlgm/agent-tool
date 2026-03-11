@@ -144,7 +144,7 @@ docker-compose up -d
 验证 ChromaDB 是否启动成功：
 
 ```bash
-curl http://localhost:8000/api/v1/version
+curl http://localhost:8000/api/v2/version
 ```
 
 ### 启动开发服务器

@@ -19,14 +19,16 @@ export interface VolcengineEmbeddingResponse {
   model: string;
   created: number;
   object: 'list';
-  data: Array<{
+  data: {
     embedding: number[];
     object: 'embedding';
-  }>;
+    index?: number;
+    sparse_embedding?: Array<{ index: number; value: number }>;
+  };
   usage: {
     prompt_tokens: number;
     total_tokens: number;
-    prompt_tokens_details: {
+    prompt_tokens_details?: {
       text_tokens: number;
       image_tokens: number;
     };

@@ -28,7 +28,7 @@ export class VectorStore {
       const client = new ChromaClient({
         host: this.host,
         port: this.port,
-      });
+      }); 
 
       this.collection = await client.getOrCreateCollection({
         name: this.collectionName,
