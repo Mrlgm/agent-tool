@@ -11,6 +11,14 @@ export const config = {
     baseUrl: process.env.VOLCENGINE_BASE_URL || 'https://ark.cn-beijing.volces.com/api/v3',
     model: process.env.VOLCENGINE_MODEL || 'doubao-pro-32k',
   },
+  tos: {
+    accessKeyId: process.env.TOS_ACCESS_KEY_ID || '',
+    accessKeySecret: process.env.TOS_ACCESS_KEY_SECRET || '',
+    region: process.env.TOS_REGION || 'cn-beijing',
+    endpoint: process.env.TOS_ENDPOINT || 'tos-cn-beijing.volces.com',
+    bucket: process.env.TOS_BUCKET || 'image2code-bucket',
+    cdnDomain: process.env.TOS_CDN_DOMAIN || '',
+  },
   tavily: {
     apiKey: process.env.TAVILY_API_KEY || '',
     baseUrl: 'https://api.tavily.com',

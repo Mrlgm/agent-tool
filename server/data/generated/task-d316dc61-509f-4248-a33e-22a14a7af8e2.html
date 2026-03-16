@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监控统计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        /* 头部导航 */
+        header {
+            height: 60px;
+            background-color: #00b5b5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        /* 主要内容 */
+        main {
+            padding: 30px 20px 100px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 32px 16px;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #00b5b5;
+        }
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            fill: #00b5b5;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .card-desc {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.4;
+        }
+        /* 底部导航 */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background-color: #ffffff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: #999999;
+        }
+        .tab-text {
+            font-size: 12px;
+            color: #999999;
+        }
+        .tab.active .tab-icon,
+        .tab.active .tab-text {
+            fill: #00b5b5;
+            color: #00b5b5;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header>监控统计</header>
+
+    <!-- 主要内容区域 -->
+    <main>
+        <div class="card-grid">
+            <!-- 在线监控卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2z"/>
+                </svg>
+                <div class="card-title">在线监控</div>
+                <div class="card-desc">客服和会话实时监控</div>
+            </div>
+
+            <!-- 呼叫监控卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/>
+                </svg>
+                <div class="card-title">呼叫监控</div>
+                <div class="card-desc">坐席和呼叫实时监控</div>
+            </div>
+
+            <!-- 在线统计卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99l1.5 1.5z"/>
+                </svg>
+                <div class="card-title">在线统计</div>
+                <div class="card-desc">客服和会话的统计</div>
+            </div>
+
+            <!-- 呼叫统计卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM19 12h2c0-4.97-4.03-9-9-9v2c3.87 0 7 3.13 7 7zm-4 0h2c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3z"/>
+                </svg>
+                <div class="card-title">呼叫统计</div>
+                <div class="card-desc">坐席和呼叫的统计</div>
+            </div>
+
+            <!-- 工单统计卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/>
+                </svg>
+                <div class="card-title">工单统计</div>
+                <div class="card-desc">客服工单的统计</div>
+            </div>
+
+            <!-- 机器人统计卡片 -->
+            <div class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8-8 3.58-8 8 3.58 8 8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+                <div class="card-title">机器人</div>
+                <div class="card-desc">机器人业务能力统计</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer>
+        <div class="tab">
+            <svg class="tab-icon" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+            <div class="tab-text">对话</div>
+        </div>
+        <div class="tab">
+            <svg class="tab-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+            <div class="tab-text">客户</div>
+        </div>
+        <div class="tab active">
+            <svg class="tab-icon" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1zm-1-7h-4v3h-2v-3H7l4-5 4 5z"/>
+            </svg>
+            <div class="tab-text">监控统计</div>
+        </div>
+        <div class="tab">
+            <svg class="tab-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+            <div class="tab-text">我的</div>
+        </div>
+    </footer>
+
+    <script>
+        // 底部导航切换
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // 卡片点击效果
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                alert(`您点击了${card.querySelector('.card-title').textContent}功能`);
+            });
+        });
+    </script>
+</body>
+</html>

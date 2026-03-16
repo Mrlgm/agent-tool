@@ -12,6 +12,19 @@ interface LLMResponse {
   }>;
 }
 
+interface VisionMessageContent {
+  type: 'text' | 'image_url';
+  text?: string;
+  image_url?: {
+    url: string;
+  };
+}
+
+interface VisionMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: VisionMessageContent[] | string;
+}
+
 function formatMessageForLog(msg: any, index: number): string {
   let content = msg.content || '';
   if (content.length > 200) {
@@ -115,6 +128,68 @@ export class LLMService {
       const requestDuration = Date.now() - requestStartTime;
       console.error(`   [LLM.chat] ❌ Request failed after ${requestDuration}ms`);
       console.error(`   [LLM.chat] Error:`, error);
+      throw error;
+    }
+  }
+
+  async chatWithVision(
+    messages: VisionMessage[]
+  ): Promise<LLMResponse> {
+    console.log(`\n   [LLM.chatWithVision] Preparing vision request`);
+    console.log(`   [LLM.chatWithVision] Messages to send: ${messages.length}`);
+
+    const formattedMessages = messages.map((msg) => {
+      if (Array.isArray(msg.content)) {
+        return {
+          role: msg.role,
+          content: msg.content.map((c) => {
+            if (c.type === 'image_url') {
+              return {
+                type: 'image_url',
+                image_url: {
+                  url: c.image_url?.url,
+                },
+              };
+            }
+            return c;
+          }),
+        };
+      }
+      return msg;
+    });
+
+    console.log(`\n   📤 [LLM.chatWithVision] ========== MESSAGES SENT TO LLM ==========`);
+    formattedMessages.forEach((msg, idx) => {
+      const contentPreview = Array.isArray(msg.content)
+        ? msg.content.map((c) => c.type === 'text' ? c.text?.substring(0, 100) : '[image]').join(' | ')
+        : String(msg.content).substring(0, 100);
+      console.log(`   📤 [${idx}] ${msg.role}: ${contentPreview}`);
+    });
+    console.log(`   📤 [LLM.chatWithVision] =============================================\n`);
+
+    const payload = {
+      model: this.model,
+      messages: formattedMessages,
+      stream: false,
+    };
+
+    console.log(`   [LLM.chatWithVision] Sending request to ${config.volcengine.baseUrl}/chat/completions`);
+    const requestStartTime = Date.now();
+
+    try {
+      const response = await this.client.post('/chat/completions', payload);
+      const requestDuration = Date.now() - requestStartTime;
+
+      console.log(`   [LLM.chatWithVision] ✅ Response received in ${requestDuration}ms`);
+
+      const parsed = this.parseResponse(response.data);
+      console.log(`   [LLM.chatWithVision] 💬 LLM returned text response (${parsed.content.length} chars)`);
+
+      return parsed;
+    } catch (error) {
+      const requestDuration = Date.now() - requestStartTime;
+      console.error(`   [LLM.chatWithVision] ❌ Request failed after ${requestDuration}ms`);
+      console.error(`   [LLM.chatWithVision] Error:`, error);
       throw error;
     }
   }

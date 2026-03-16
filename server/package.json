@@ -8,6 +8,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@volcengine/tos-sdk": "^2.9.0",
     "axios": "^1.7.9",
     "chromadb": "^3.3.2",
     "cors": "^2.8.5",

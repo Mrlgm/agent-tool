@@ -9,6 +9,9 @@ import { searchTool, searchExecutor } from "./services/tools/search.js";
 import { datetimeTool, datetimeExecutor } from "./services/tools/datetime.js";
 import { memorySearchTool, memorySearchExecutor, memorySaveTool, memorySaveExecutor } from "./services/tools/memory.js";
 import { createChatRouter } from "./routes/chat.js";
+import { createUploadRouter } from "./routes/upload.js";
+import { createGenerateRouter } from "./routes/generate.js";
+import { createPreviewRouter } from "./routes/preview.js";
 import { EmbeddingService } from "./services/embedding/index.js";
 import { MemoryService } from "./services/memory/index.js";
 
@@ -19,7 +22,8 @@ console.log("=".repeat(50));
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 console.log("\n📦 Initializing Tool Registry...");
 const toolRegistry = new ToolRegistry();
@@ -70,6 +74,15 @@ console.log("✅ Agent Service ready");
 console.log("\n🌐 Setting up routes...");
 app.use("/api/chat", createChatRouter(agentService));
 console.log("✅ Routes configured: POST /api/chat");
+
+app.use("/api/upload", createUploadRouter());
+console.log("✅ Routes configured: POST /api/upload");
+
+app.use("/api/generate", createGenerateRouter());
+console.log("✅ Routes configured: POST /api/generate/start, GET /api/generate/status/:taskId");
+
+app.use("/api/preview", createPreviewRouter());
+console.log("✅ Routes configured: GET /api/preview/:taskId");
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
